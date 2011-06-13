@@ -5,10 +5,14 @@ import ozma._
 
 import util._
 
-object SquareKind extends Enumeration {
-  val Normal = Value("Normal")
-  val Bomb = Value("Bomb")
-  val Food = Value("Food")
+sealed abstract class SquareKind(val name: String) {
+  override def toString() = name
+}
+
+object SquareKind {
+  object Normal extends SquareKind("Normal")
+  object Bomb extends SquareKind("Bomb")
+  object Food extends SquareKind("Food")
 }
 
 class SquareInfo(val home: Option[Team], val kind: SquareKind,
@@ -24,8 +28,6 @@ class Square(val master: Master, val pos: Pos,
 
   val isHome = !_home.isEmpty
   def home = _home.get
-
-  println(pos + " - " + kind + " - " + isHome)
 
   def isHomeOf(team: Team) = isHome && (home == team)
   def isHomeOf(player: Player) = isHome && (home == player.team)
@@ -46,7 +48,7 @@ class Square(val master: Master, val pos: Pos,
     def isTeamMateOf(p: Player): Boolean = isTeamMateOf(p.team)
   }
 
-  protected val initialState = State(None, None, true)
+  protected def initialState = State(None, None, true)
 
   def quit(): Ack = serialized { state =>
     (Ack, state.copy(player = None))
@@ -90,7 +92,7 @@ class Square(val master: Master, val pos: Pos,
   }
 
   def disable(state: State) = {
-    val time = kind match {
+    val time = (kind: @unchecked) match {
       case SquareKind.Bomb => master.bombRepopTime
       case SquareKind.Food => master.foodRepopTime
     }

@@ -49,9 +49,7 @@ class Master(settings: Settings) extends AdvancedPortObject {
   private val _squares = makeSquares()
 
   def squares(pos: Pos): Square =
-    _squares(pos.y * mapWidth + pos.x)
-
-  println("finished master creation")
+    _squares(pos.x * mapHeight + pos.y)
 
   final case class State(
     capturedFlagsByA: Int,
@@ -77,26 +75,13 @@ class Master(settings: Settings) extends AdvancedPortObject {
   protected def initialState = State(0, 0, false, None)
 
   private def makeSquares() = {
-    println("will make squares")
-
     val centerPositions = Pos.rectangle((0, baseHeight), centerSize)
-    println("center positions:")
-    centerPositions foreach println
     val shuffled = centerPositions.sort((a, b) => Random.rand(2) == 0)
-    println("shuffled:")
-    shuffled foreach println
 
     val (bombsPositions, shuffled1) = shuffled.splitAt(settings.bombs)
-    println("bombs:")
-    bombsPositions foreach println
     val foodsPositions = shuffled1.take(settings.foods)
-    println("foods:")
-    foodsPositions foreach println
 
-    println()
-    println("now will create the squares")
     for (pos <- Pos.rectangle(0, 0, mapWidth, mapHeight)) yield {
-      println(pos)
       if (homeAPositions contains pos)
         new Square(this, pos, _home = Some(teamA))
       else if (homeBPositions contains pos)
@@ -114,8 +99,6 @@ class Master(settings: Settings) extends AdvancedPortObject {
     team.newPlayer(pos)
 
   def start() {
-    println("start!")
-
     for (i <- 1 to settings.flagsPerTeam) {
       popFlag(teamA)
       popFlag(teamB)

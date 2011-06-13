@@ -32,8 +32,8 @@ class Observer(val master: Master) {
   }
 
   def observeGame() {
-    for (y <- 0 until mapHeight) {
-      for (x <- 0 until mapWidth)
+    for (y <- 0 to (mapHeight-1)) {
+      for (x <- 0 to (mapWidth-1))
         printInfoAsChar(master.squares(Pos(x, y)).getInfo)
       println()
     }
