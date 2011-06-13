@@ -11,7 +11,7 @@ case class Pos(x: Int, y: Int) {
 
   def until(that: Pos) = {
     for (x1 <- x to (that.x-1) toList; y1 <- y to (that.y-1) toList)
-      yield { val p = Pos(x1, y1); println(p); p }
+      yield Pos(x1, y1)
   }
 
   def around(n: Int) = {

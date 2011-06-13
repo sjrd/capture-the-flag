@@ -32,7 +32,9 @@ class GamePlay(val master: Master) extends AdvancedStatelessPortObject {
     val oldSquare = master.squares(oldPos)
     val newSquare = master.squares(newPos)
 
-    if ((oldSquare.getPlayer ne player) || master.isTerminated) {
+    val oldPl= oldSquare.getPlayer
+
+    if (oldPl.isEmpty || (oldPl.get ne player) || master.isTerminated) {
       // Player has been killed or game is finished: abort
     } else if (newSquare.isTeamMateOf(player)) {
       // Blocked by a team mate, but you can try again
