@@ -10,7 +10,7 @@ case class Pos(x: Int, y: Int) {
       yield Pos(x1, y1)
 
   def until(that: Pos) = {
-    for (x1 <- x to (that.x-1) toList; y1 <- y to (that.y-1) toList)
+    for (x1 <- x until that.x toList; y1 <- y until that.y toList)
       yield Pos(x1, y1)
   }
 
